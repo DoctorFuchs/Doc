@@ -61,6 +61,8 @@ class doc:
         self.consoleInput = "CONSOLE IN"
         self.consoleOutput = "CONSOLE OUT"
 
+        self.installed = []
+
         instance = self
         
         self.debug.addEvent("Create Variables...Finished", self.system)
@@ -150,13 +152,11 @@ class doc:
                 self.debug.addEvent("Console Exited", self.consoleGeneral)
                 break
 
-    def installPackage(self, path, packageName):
+    def installPackage(self, packageName):
+        path = f"plugins/{packageName}"
         self.Listener.PluginInstall(packageName, path)
         self.debug.addEvent("Install Package "+packageName+" from "+path, self.plugin)
-
-    def uninstallPackage(self, packageName):
-        self.Listener.PluginUninstall(packageName)
-        self.debug.addEvent("Uninstall Package "+packageName, self.plugin) 
+        exec(f"import plugins.{packageName}.Main as {packageName}")
         
     def getPluginCommands(self):
         return self.PluginCommands
@@ -189,9 +189,36 @@ class interpret:
         if com in " ":
             pass
 
+        elif com == "pack":
+            try:
+                self.instance.installPackage(args[0])
+                self.instance.installed.append(args[0])
+
+            except:
+                self.instance.docprint("please input the package name")
+                a = self.instance.docinput("Packagename: ")
+                try:
+                    self.instance.installPackage(a)
+                    self.instance.installed.append(a)
+
+                except:
+                    self.instance.docprint("no package available named "+a, consoleOutput=True)
+
         elif com in self.commands:
             objekt = self.commands[com]
             return eval(objekt)
+
+        elif com in self.instance.installed:
+            #try:
+            objekt = self.commands[com+" "+args[0]]
+            return eval(objekt)
+
+            """except:
+                try:
+                    self.instance.docprint(f"{com} has no command "+args[0])
+
+                except:
+                    self.instance.docprint(f"{com} is an installed Plugin")"""
         
         else:
             return "no command named "+com
@@ -200,11 +227,7 @@ class interpret:
 def echo(args):
     return str(" ".join(args))
 
-def pack(args, instance):
-    instance.installPackage(args[0], args[1]) 
-
-
-#TODO more Systemcommands
+#TODO more useful built-in functions
 
 doc1 = doc(username="Paul", plugin=False, live_debug=True)
 doc1.terminalclient()

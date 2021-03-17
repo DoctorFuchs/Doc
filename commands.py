@@ -15,6 +15,7 @@ def update():
     comfile = open("plugins/PluginCommands.txt", "r+")
 
     coms = comfile.readlines()
+    print(coms)
 
     comsfinal = []
 
@@ -26,10 +27,13 @@ def update():
     comfile.close()
 
 
-def addCommand(command, code):
+def addCommand(command, code, pluginName, runable=False):
     comfile = open("plugins/PluginCommands.txt", "at")
 
-    comfile.write(command + ":" + code + "\n")
+    if not runable:
+        comfile.write(pluginName+" "+command + ":\"" + str(code) + "\"\n")
+
+    else:
+        comfile.write(pluginName+" "+command + ":" + str(code) + "\n")
 
     comfile.close()
-
