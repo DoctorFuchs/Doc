@@ -1,2 +1,2 @@
-example hallo:return OHA
-example hallo:"return OHA"
+example hallo:import time§§§§§print(time.ctime());
+example hallo:print("your code");

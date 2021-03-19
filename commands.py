@@ -15,13 +15,20 @@ def update():
     comfile = open("plugins/PluginCommands.txt", "r+")
 
     coms = comfile.readlines()
-    print(coms)
+
+    coms = "".join(coms)
+    coms = coms.split(";")
 
     comsfinal = []
 
     for i in range(len(coms)):
-        comsfinal = coms[i].split(":", 1)
-        commands[comsfinal[0]] = comsfinal[1]
+        try:
+            comsfinal = coms[i].split(":", 1)
+            commands[comsfinal[0]] = comsfinal[1]
+
+        except IndexError:
+            pass
+
         comsfinal.clear()
 
     comfile.close()
@@ -31,9 +38,11 @@ def addCommand(command, code, pluginName, runable=False):
     comfile = open("plugins/PluginCommands.txt", "at")
 
     if not runable:
-        comfile.write(pluginName+" "+command + ":\"" + str(code) + "\"\n")
+        comfile.write(pluginName+" "+command + ":\"\"\"" + str(code) + "\"\"\";\n")
 
     else:
-        comfile.write(pluginName+" "+command + ":" + str(code) + "\n")
+        code = code.split("\n")
+        code = key.join(code)
+        comfile.write(pluginName+" "+command + ":" +str(code) + ";\n")
 
     comfile.close()
