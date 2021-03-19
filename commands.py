@@ -5,6 +5,8 @@ commands = {
     " ": ""
 }
 
+key = "§§§§§"
+
 
 def getCommands():
     global commands
