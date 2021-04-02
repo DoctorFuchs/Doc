@@ -22,6 +22,6 @@ We  are checking every Pull Request. Please don't create millions pull requests 
 
 Test this Console on Windows and Linux. 
 
-Tip: Use OOP to make this feature useful. If you want to add uneditable commands take them to the SystemCommands.txt file
+Tip: Use OOP to make your feature useful.
 
 At Questions open an Issue!

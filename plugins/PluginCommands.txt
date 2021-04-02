@@ -1,2 +1,1 @@
-example hallo:import time§§§§§print(time.ctime());
-example hallo:print("your code");
+example hallo:plugins.example.Main.p();

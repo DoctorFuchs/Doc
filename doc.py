@@ -1,7 +1,7 @@
 from Listener import Listener
 import time
 import commands
-
+import plugins
 
 class debug:
     def __init__(self, live_debug=False):
@@ -32,6 +32,11 @@ class doc:
         self.debug = debug(live_debug=live_debug)
 
         self.debug.addEvent("Starting DOC...", "SYSTEM")
+        self.debug.addEvent("Clear Commands...", "SYSTEM")
+
+        commands.clear()
+
+        self.debug.addEvent("Clear Commands... Finished", "SYSTEM")
         self.debug.addEvent("Create Variables...", "SYSTEM")
 
         # init names
@@ -56,15 +61,12 @@ class doc:
 
         self.debug.addEvent("Listener Build... Finished", self.system)
         self.debug.addEvent("Interpret Build...", self.system)
+
         self.interpret = interpret(instance)
+
         self.debug.addEvent("Interpret Build... Finished", self.system)
 
-        self.pluginMode = plugin
-
-        if self.pluginMode == True:
-            self.sender = self.plugin
-
-        elif __name__ == "system":
+        if __name__ == "system":
             self.sender = self.system
 
         else:
@@ -196,25 +198,29 @@ class interpret:
             return eval(objekt)
 
         elif com in self.instance.installed:
-
-            objekt = self.commands[com + " " + args[0]]
-
-            obj = []
-
-            obj = objekt.split(commands.key)
-
-            for i in range(len(obj)):
-                eval(obj[i])
-
             try:
-                pass
+                objekt = self.commands[com + " " + args[0]]
+                obj = []
 
-            except:
+                obj = objekt.split(commands.key)
+
+                for i in range(len(obj)):
+                    eval(obj[i])
+
                 try:
-                    self.instance.docprint(f"{com} has no command " + args[0])
+                    pass
 
                 except:
-                    self.instance.docprint(f"{com} is an installed Plugin")
+                    try:
+                        self.instance.docprint(f"{com} has no command " + args[0])
+
+                    except:
+                        self.instance.docprint(f"{com} is an installed Plugin")
+
+            except IndexError:
+                self.instance.docprint(com + " is an installed plugin")
+
+
 
         else:
             return "no command named " + com
