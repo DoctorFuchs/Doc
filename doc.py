@@ -2,6 +2,8 @@ from Listener import Listener
 import time
 import commands
 import plugins
+import os
+
 
 class debug:
     def __init__(self, live_debug=False):
@@ -26,7 +28,7 @@ class debug:
 
 
 class doc:
-    def __init__(self, username="USER", plugin=False, live_debug=False):
+    def __init__(self, username="USER", live_debug=False):
         start = time.time()
 
         self.debug = debug(live_debug=live_debug)
@@ -221,17 +223,33 @@ class interpret:
                 self.instance.docprint(com + " is an installed plugin")
 
 
-
         else:
             return "no command named " + com
 
 
 # Systemcommands
-def echo(args):
-    return str(" ".join(args))
+def store(args):
+    args = " ".join(args)
+    blocked = [".DS_Store", "__pycache__", "__init__.py", "PluginCommands.txt"]
+    plugins = os.listdir(commands.getMainPath()+'/plugins')
+
+    print("Available Plugins:\n")
+
+    for i in range(len(plugins)):
+        if plugins[i] in blocked:
+            pass
+
+        elif args in " ":
+            print(plugins[i])
+
+        elif args in plugins[i]:
+            print(plugins[i])
+
+    print("\n")
+
 
 
 # TODO more useful built-in functions
 
-doc1 = doc(username="Paul", plugin=False, live_debug=True)
+doc1 = doc(username="Paul", live_debug=True)
 doc1.terminalclient()

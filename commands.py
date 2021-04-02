@@ -2,6 +2,7 @@ commands = {
     "echo": "echo(args)",
     "pack": "pack(args, this)",
     "commands": "commands.getCommands()",
+    "store":"store(args)",
     " ": ""
 }
 

@@ -1,1 +1,0 @@
-example hallo:plugins.example.Main.p();
