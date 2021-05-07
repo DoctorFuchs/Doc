@@ -1,27 +1,49 @@
-# Welcome to Contributing
+# CONTRIBUTING
 
-## Add Plugins with good features and contribute to other Plugins
+## RULES
 
-### OR
+Test your changes!
+In future I will add a test client for testing plugins :-)
 
-## Contribute directly to DOC
+## Creating Plugins
 
-### TASK:
+````python
+# in Main.py
+# Init the plugin
+from core.new import plugin
 
-`````text
-Often many things are marked with #TODO so you can find them
+yourPlugin = plugin.plugin("plugin_name") # plugin_name have to be the dict name 
 
-- Interface client for DOC. (If you want to do that, open an Issue!)
-- replace all strings with variables (lists using enum) and pack them to an external file.
-- add more useful built-in functions
-`````
+# add a command
+@yourPlugin.command("command")
+def yourFunction():
+    print("this is your command")
 
-#### How to test the DOC console
+# add a command using args the same with instance
+@yourPlugin.command("withargs", args=True)
+def functionwithargs(args):
+    del args[0] # the first argument is the function name (here "withargs")
+    print("this was your args: "+" ".join(args))
+````
 
-We  are checking every Pull Request. Please don't create millions pull requests at the same time.
+```commandline
+[DOC][Example]>>> pack plugin_name  
+[DOC][Example]>>> plugin_name command
+this is your command
+[DOC][Example]>>> plugin_name withargs hello and welcome
+this was your args: hello and welcome
+```
 
-Test this Console on Windows and Linux. 
+## args
 
-Tip: Use OOP to make your feature useful.
+args -> list <br>
+args contains not the main command!
 
-At Questions open an Issue!
+````commandline
+[DOC][Example]>>> command args[0] args[1] args[2]...
+````
+
+## instance
+
+instance -> doc-console <br>
+instance is used to get the configured doc console

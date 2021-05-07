@@ -1,0 +1,22 @@
+div.header{
+    background-color: black;
+    overflow: hidden;
+    width:100%;
+    height:80px;
+    font-size: 10px;
+}
+
+a.hide{
+    color: #ffffff;
+    text-decoration: none;
+    outline: 0; 
+}
+
+table.frames{
+    font-size: 500%;
+}
+
+th{
+    padding-left: 2em;
+    padding-right: 2em;
+}
