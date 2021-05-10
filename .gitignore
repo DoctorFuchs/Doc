@@ -6,6 +6,7 @@ __pycache__/
 .idea
 Doc.iml
 out
+users
 
 # C extensions
 *.so

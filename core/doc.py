@@ -1,10 +1,10 @@
 import time
-from core.new import commands, debug, Listener
+from core.new import commands, debug, Listener, auth
 from core.new.Interpret import interpreter
 
 
 class doc:
-    def __init__(self, username="USER", live_debug=False):
+    def __init__(self, username="USER", live_debug=False, guest=False):
 
         start = time.time()
 
@@ -33,6 +33,11 @@ class doc:
         self.instance = self
 
         self.debug.addEvent("Create Variables...Finished", self.system)
+        self.debug.addEvent("Auth Build...", self.system)
+
+        self.auth = auth.auth(self.instance)
+
+        self.debug.addEvent("Auth Build... Finished", self.system)
         self.debug.addEvent("Listener Build...", self.system)
 
         self.Listener = Listener.Listener()
@@ -60,6 +65,14 @@ class doc:
             starttime = "under 1"
 
         self.debug.addEvent("DOC started in " + str(starttime) + " second(s)", self.system)
+
+        if not guest:
+            try:
+                self.auth.login()
+
+            except:
+                self.docprint("login failed! exit")
+                self.Listener.ConsoleExit(400)
 
     def log(self, command="docinputevent"):
         self.interpret.update()
@@ -131,13 +144,8 @@ class doc:
     def getInstance(self):
         return self.instance
 
-    def installPackage(self, packageName:str):
+    def installPackage(self, packageName: str):
         path = f"plugins/{packageName}"
         self.Listener.PluginInstall(packageName, path)
         self.debug.addEvent("Install Package " + packageName + " from " + path, self.plugin)
         exec(f"import core.plugins.{packageName}.Main as {packageName}")
-
-
-if __name__ == '__main__':
-    t = doc("USER", live_debug=False)   # init the doc console
-    t.terminalclient()                  # starts the default terminal client
