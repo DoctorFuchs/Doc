@@ -1,11 +1,16 @@
+import sys
+import os
 import time
+
+sys.path.append(str(os.path.dirname(os.path.abspath(__file__))).replace("Doc/core", "Doc"))
+
+import version
 from core.new import commands, debug, Listener, auth
 from core.new.Interpret import interpreter
 
 
 class doc:
     def __init__(self, username="USER", live_debug=False, guest=False):
-
         start = time.time()
 
         self.debug = debug.debug(live_debug=live_debug)
@@ -18,7 +23,7 @@ class doc:
         self.debug.addEvent("Clear Commands... Finished", "SYSTEM")
         self.debug.addEvent("Create Variables...", "SYSTEM")
 
-        # init names
+        # init names for debug
         self.username = username
         self.user = "USER:" + self.username
         self.plugin = "PLUGIN"
@@ -59,12 +64,12 @@ class doc:
         self.debug.addEvent("Starting DOC... Finished", self.system)
         stop = time.time()
 
-        starttime = round((stop - start) * 1000) / 1000
+        start_time = round((stop - start) * 1000) / 1000
 
-        if starttime < 1:
-            starttime = "under 1"
+        if start_time < 1:
+            start_time = "under 1"
 
-        self.debug.addEvent("DOC started in " + str(starttime) + " second(s)", self.system)
+        self.debug.addEvent("DOC started in " + str(start_time) + " second(s)", self.system)
 
         if not guest:
             try:
@@ -73,6 +78,10 @@ class doc:
             except:
                 self.docprint("login failed! exit")
                 self.Listener.ConsoleExit(400)
+                quit()
+
+        else:
+            self.username = "USER"
 
     def log(self, command="docinputevent"):
         self.interpret.update()
@@ -80,7 +89,7 @@ class doc:
         self.debug.addEvent(f"{command}", self.consoleInput)
 
         if command == "docinputevent":
-            line_in = self.docinput(placeholder="[DOC]>>> ")
+            line_in = self.docinput(placeholder=f"[DOC][{self.username}]>>> ")
 
         else:
             line_in = command
@@ -99,37 +108,17 @@ class doc:
         else:
             print(text, end=end)
 
-    def docinput(self, placeholder=""):
+    def docinput(self, placeholder="") -> str:
         # input
         userinput = input(placeholder + "")
-
         self.Listener.UserInput(self.username, userinput)
 
         return userinput
 
-    def terminalclient(self, watchdog=True):
+    def terminalclient(self):
         self.Listener.TerminalClientStart()
-
-        if watchdog:
-            try:
-                while True:
-                    line_in = self.docinput(placeholder=f"[DOC][{self.username}]>>> ")
-                    if line_in.lower() != "exit":
-                        self.docprint(self.log(line_in.lower()))
-                        continue
-
-                    else:
-                        self.Listener.TerminalClientStop(exitCode=200)
-                        self.debug.addEvent("Console Exited", self.consoleGeneral)
-                        break
-
-            except:
-                self.docprint("Exit console")
-                self.Listener.TerminalClientStop()
-                self.debug.addEvent("Console Exited", self.consoleGeneral)
-                exit()
-
-        else:
+        self.docprint("DOC-TERMINAL_CLIENT running DOC-" + version.version)
+        try:
             while True:
                 line_in = self.docinput(placeholder=f"[DOC][{self.username}]>>> ")
                 if line_in.lower() != "exit":
@@ -141,6 +130,12 @@ class doc:
                     self.debug.addEvent("Console Exited", self.consoleGeneral)
                     break
 
+        except:
+            self.docprint("Exit console")
+            self.Listener.TerminalClientStop()
+            self.debug.addEvent("Console Exited", self.consoleGeneral)
+            quit()
+
     def getInstance(self):
         return self.instance
 
@@ -148,4 +143,10 @@ class doc:
         path = f"plugins/{packageName}"
         self.Listener.PluginInstall(packageName, path)
         self.debug.addEvent("Install Package " + packageName + " from " + path, self.plugin)
-        exec(f"import core.plugins.{packageName}.Main as {packageName}")
+        exec(f"import core.plugins.{packageName}.DOC as {packageName}")
+
+
+if __name__ == '__main__':
+    this = doc(guest=False, username="Hallo")
+    this.terminalclient()
+

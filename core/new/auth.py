@@ -42,7 +42,7 @@ class auth:
 
     def isRegistered(self, username):
         self.update()
-        if username in get_keys(self.accounts):
+        if username.lower() in get_keys(self.accounts):
             return True
 
         else:

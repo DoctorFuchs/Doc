@@ -60,5 +60,9 @@ class interpreter:
                 except:
                     self.instance.docprint(f"{com} is an installed Plugin")
 
+            except Exception as e:
+                self.instance.docprint(f"The {com} plugin raise an error! \nContact the developer with open an issue"
+                                       f"on Github")
+
         else:
             return "no command named " + com

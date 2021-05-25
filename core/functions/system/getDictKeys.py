@@ -1,4 +1,4 @@
-def get_keys(dictt: dict):
+def get_keys(dictt: dict) -> [str]:
     keys = str(dictt.keys())
     keys = "".join(keys.split("dict_keys(["))
     keys = "".join(keys.split("])"))

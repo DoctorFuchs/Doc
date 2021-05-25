@@ -8,7 +8,7 @@ for i in range(len(os.listdir(getMainPath() + "core/functions/builtin"))):
     exec("from core.functions.builtin import " + os.listdir(getMainPath() + "core/functions/builtin")[i].replace(".py",""))
 
 
-def h(args: list, instance):
+def h(args: list, instance) -> str:
     """print this help"""
     coms.update()
     searchstring = ""
@@ -26,7 +26,11 @@ def h(args: list, instance):
         if helper == "h.h.__doc__":
             helper = "h.__doc__"
 
+        help_text = eval(helper)
+        if help_text is None:
+            help_text = "No description available"
+
         if searchstring in get_keys(coms.getCommands())[i]:
-            output += f"""\t{get_keys(coms.getCommands())[i]}:{eval(helper)}\n"""
+            output += f"""\t{get_keys(coms.getCommands())[i]}:{help_text}\n"""
 
     return output

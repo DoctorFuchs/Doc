@@ -52,11 +52,12 @@ def update():
     comfile.close()
 
 
-def addCommand(command, code, pluginName, runable=False, needArgs=["args", "instance"]):
+def addCommand(command, code, pluginName, runable=False, needArgs=None):
     """needArgs is only used, when code is a function"""
+    if needArgs is None:
+        needArgs = ["args", "instance"]
     comfile = open(getMainPath() + "core/plugins/PluginCommands.txt", "at")
     codefile = open(getMainPath() + "core/plugins/plugincodes.py", "at")
-    # comfile = open("/Users/simonmennicken/Documents/GitHub/T2K/Doc/Doc/core/plugins/PluginCommands.txt", "at")
 
     if not runable:
         comfile.write(pluginName + " " + command.lower() + ":\"\"\"" + str(code) + "\"\"\";\n")
@@ -68,9 +69,7 @@ def addCommand(command, code, pluginName, runable=False, needArgs=["args", "inst
             comfile.write(pluginName + " " + command.lower() + ":" + str(code) + ";\n")
 
         except:
-            args = ""
-            for i in range(len(needArgs)):
-                args += needArgs[i]
+            args = ", ".join(needArgs)
 
             codepath = "plugins.plugincodes." + code.__code__.co_name + f"({args})"
             comfile.write(pluginName + " " + command.lower() + ":" + codepath + ";\n")
