@@ -6,8 +6,9 @@ import importlib as imp
 import os
 
 for i in range(len(os.listdir(getMainPath() + "core/functions/builtin"))):
-    exec("from core.functions.builtin import " + os.listdir(getMainPath() + "core/functions/builtin")[i].replace(".py",
-                                                                                                                 ""))
+    if os.listdir(getMainPath() + "core/functions/builtin")[i].endswith(".py"):
+        exec("from core.functions.builtin import " + os.listdir(getMainPath() + "core/functions/builtin")[i].replace(
+            ".py", ""))
 
 
 class interpreter:
@@ -61,8 +62,13 @@ class interpreter:
                     self.instance.docprint(f"{com} is an installed Plugin")
 
             except Exception as e:
-                self.instance.docprint(f"The {com} plugin raise an error! \nContact the developer with open an issue"
-                                       f"on Github")
+                if self.instance.dev:
+                    raise e
+
+                else:
+                    self.instance.docprint(
+                        f"The {com} plugin raise an error! \nContact the developer with open an issue"
+                        f"on Github")
 
         else:
             return "no command named " + com

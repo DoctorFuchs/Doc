@@ -5,8 +5,6 @@ from core.functions.system.hash import hash
 from core.functions.system.getDictKeys import get_keys
 from core.new import auths
 
-Autherror: Exception
-
 
 class auth:
     def __init__(self, instance):

@@ -2,7 +2,7 @@ import sys
 import os
 import time
 
-sys.path.append(str(os.path.dirname(os.path.abspath(__file__))).replace("Doc/core", "Doc"))
+sys.path.append(str(os.path.dirname(os.path.abspath(__file__))).replace("core", ""))
 
 import version
 from core.new import commands, debug, Listener, auth
@@ -10,7 +10,7 @@ from core.new.Interpret import interpreter
 
 
 class doc:
-    def __init__(self, username="USER", live_debug=False, guest=False):
+    def __init__(self, username="USER", live_debug=False, guest=False, dev = False):
         start = time.time()
 
         self.debug = debug.debug(live_debug=live_debug)
@@ -22,6 +22,8 @@ class doc:
 
         self.debug.addEvent("Clear Commands... Finished", "SYSTEM")
         self.debug.addEvent("Create Variables...", "SYSTEM")
+
+        self.dev = dev
 
         # init names for debug
         self.username = username
@@ -46,6 +48,7 @@ class doc:
         self.debug.addEvent("Listener Build...", self.system)
 
         self.Listener = Listener.Listener()
+        self.Listener.subclass = False
         self.Listener.ConsoleStart()
 
         self.debug.addEvent("Listener Build... Finished", self.system)
@@ -130,11 +133,15 @@ class doc:
                     self.debug.addEvent("Console Exited", self.consoleGeneral)
                     break
 
-        except:
-            self.docprint("Exit console")
-            self.Listener.TerminalClientStop()
-            self.debug.addEvent("Console Exited", self.consoleGeneral)
-            quit()
+        except Exception as e:
+            if not self.dev:
+                self.docprint("Exit console")
+                self.Listener.TerminalClientStop()
+                self.debug.addEvent("Console Exited", self.consoleGeneral)
+                quit()
+
+            else:
+                raise e
 
     def getInstance(self):
         return self.instance
@@ -147,6 +154,6 @@ class doc:
 
 
 if __name__ == '__main__':
-    this = doc(guest=False, username="Hallo")
+    this = doc(guest=False, username="Hallo", dev=True)
     this.terminalclient()
 

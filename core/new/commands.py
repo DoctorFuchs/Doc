@@ -44,7 +44,7 @@ def update():
     for i in range(len(docbuiltins)):
         exedoc = docbuiltins[i].replace(".py", "") + "." + docbuiltins[i].replace(".py", "")
 
-        if docbuiltins[i] in ["__init__.py", "__pycache__"]:
+        if docbuiltins[i] in ["__init__.py", "__pycache__", ".DS_Store"]:
             continue
 
         commands[docbuiltins[i].replace(".py", "")] = exedoc + "(args, self.instance.getInstance())"

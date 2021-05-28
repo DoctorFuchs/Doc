@@ -5,7 +5,8 @@ from core import plugins
 from core.functions.system.getMainPath import getMainPath
 
 for i in range(len(os.listdir(getMainPath() + "core/functions/builtin"))):
-    exec("from core.functions.builtin import " + os.listdir(getMainPath() + "core/functions/builtin")[i].replace(".py",""))
+    if os.listdir(getMainPath() + "core/functions/builtin")[i].endswith(".py"):
+        exec("from core.functions.builtin import " + os.listdir(getMainPath() + "core/functions/builtin")[i].replace(".py", ""))
 
 
 def h(args: list, instance) -> str:
