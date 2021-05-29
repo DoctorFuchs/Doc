@@ -1,9 +1,17 @@
+def check():
+    subclasses = 0
+    for i in range(len(Listener.__subclasses__())):
+        if not Listener.__subclasses__()[i]().subclass:
+            Listener.__subclasses__()[i]().subclass = True
+
+
 class Listener:
     def __init__(self):
-        self.subclass = issubclass(Listener, self.__class__)
+        self.subclass = True
 
     def UserInput(self, username: str, userinput: str):
         """get triggered, when a plugin want a Input from a User"""
+        check()
         if self.subclass:
             return
 
@@ -13,6 +21,7 @@ class Listener:
 
     def Print(self, text: str):
         """get triggered, when a text print out"""
+        check()
         if self.subclass:
             return
 
@@ -22,6 +31,7 @@ class Listener:
 
     def ConsoleRun(self, command: str, sender: str):
         """get triggered, when a command run"""
+        check()
         if self.subclass:
             return
 
@@ -31,6 +41,7 @@ class Listener:
 
     def ConsoleExit(self, errorcode=200):
         """get triggered, when the Console stops. With a ErrorCode"""
+        check()
         if self.subclass:
             return
 
@@ -40,6 +51,7 @@ class Listener:
 
     def ConsoleStart(self):
         """get triggered, when the Console Start"""
+        check()
         if self.subclass:
             return
 
@@ -49,6 +61,7 @@ class Listener:
 
     def PluginInstall(self, pluginName: str, pluginPath: str):
         """get triggered, when Plugin get install"""
+        check()
         if self.subclass:
             return
 
@@ -58,6 +71,7 @@ class Listener:
 
     def PluginUninstall(self, packageName: str):
         """get triggered, when Plugin get uninstall"""
+        check()
         if self.subclass:
             return
 
@@ -67,6 +81,7 @@ class Listener:
 
     def TerminalClientStart(self):
         """get triggered, when user terminal start"""
+        check()
         if self.subclass:
             return
 
@@ -76,6 +91,7 @@ class Listener:
 
     def TerminalClientStop(self, exitCode=200):
         """get triggered, when user terminal stop"""
+        check()
         if self.subclass:
             return
 
@@ -85,6 +101,7 @@ class Listener:
 
     def CustomClientStart(self):
         """get triggered, when user terminal start"""
+        check()
         if self.subclass:
             return
 
@@ -94,6 +111,7 @@ class Listener:
 
     def CustomClientStop(self, exitCode=200):
         """get triggered, when user terminal stop"""
+        check()
         if self.subclass:
             return
 
@@ -103,10 +121,10 @@ class Listener:
 
     def commandUpdate(self):
         """get triggered, when commands get updated"""
+        check()
         if self.subclass:
             return
 
         for i in range(len(Listener.__subclasses__())):
             if Listener.__subclasses__()[i]().subclass:
-                print("update")
                 Listener.__subclasses__()[i]().commandUpdate()

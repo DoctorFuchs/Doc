@@ -4,7 +4,6 @@ from core.new.commands import addCommand
 class plugin:
     def __init__(self, name):
         self.name = name
-        self.firstrun = 1
 
     def command(self, command: str, args=False, instance=False):
         needArgs = []

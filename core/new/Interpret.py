@@ -21,6 +21,7 @@ class interpreter:
         self.commands = commands.getCommands()
 
     def log(self, command):
+        instance = self.instance
         self.instance.debug.addEvent(event="Update Plugin Commands", source="PLUGINLOG")
         self.instance.Listener.commandUpdate()
         commands.update()
@@ -50,16 +51,20 @@ class interpreter:
                 obj = []
 
                 obj = object.split(commands.key)
-                for i in range(len(obj)):
-                    instance = self.instance
-                    eval(obj[i])
+                for j in range(len(obj)):
+                    eval(obj[j])
 
-            except KeyError:
+            except (KeyError, IndexError) as e:
                 try:
                     self.instance.docprint(f"{com} has no command " + args[0])
 
                 except:
-                    self.instance.docprint(f"{com} is an installed Plugin")
+                    try:
+                        obj = self.commands[com+" "]
+                        eval(obj)
+
+                    except:
+                        self.instance.docprint(f"{com} is an installed Plugin")
 
             except Exception as e:
                 if self.instance.dev:

@@ -4,22 +4,21 @@ from core.new.Listener import Listener
 example_plugin = plugin.plugin("example")
 
 
+@example_plugin.command("version", instance=True)
+def example(instance):
+    import version  # use local imports
+    instance.docprint("print " + version.version)  # use docprint() to print on all clients
+
+
 @example_plugin.command("hello", instance=True)
 def sayHello(instance):
-    from core.new.Listener import Listener
     instance.docprint("hello")
-    print(Listener.__subclasses__())
 
 
 @example_plugin.command("echo", args=True, instance=True)
 def echo(args, instance):
-    del args[0]
+    del args[0]  # args[0] is to 100% echo
     instance.docprint(" ".join(args))
-
-
-@example_plugin.command("subs", instance=True)
-def subs(instance):
-    instance.docprint(instance.Listener.__subclass__())
 
 
 class example_listener(Listener):
@@ -28,9 +27,3 @@ class example_listener(Listener):
 
     def ConsoleRun(self, command: str, sender: str):
         print("execute: " + command)
-
-    def UserInput(self, username: str, userinput: str):
-        print(f"userinput from {username}: "+userinput)
-
-    def commandUpdate(self):
-        print("lone")
