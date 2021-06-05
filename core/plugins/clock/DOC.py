@@ -9,7 +9,7 @@ def clock(instance):
     import time, datetime
     try:
         while True:
-            instance.docprint("\r" + datetime.datetime.now().strftime("%H:%M:%S"), end="")
+            instance.docprint("\r" + str(datetime.datetime.now().strftime("%H:%M:%S")), end="")
             time.sleep(1)
 
     except:

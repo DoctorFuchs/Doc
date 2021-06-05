@@ -8,6 +8,7 @@ import version
 from core.new import commands, debug, Listener, auth
 from core.new.Interpret import interpreter
 from core.functions.system.Sections import *
+from core.functions.system import updater
 
 
 class doc:
@@ -15,6 +16,29 @@ class doc:
         start = time.time()
 
         self.debug = debug.debug(instance=self, live_debug=live_debug)
+        self.debug.start = True
+
+        self.debug.addEvent("Starting DOC...", SYSTEM)
+        self.debug.addEvent("Checking for updates...", SYSTEM)
+
+        new_version = updater.getGithubVersion()
+
+        if new_version == version.version:
+            self.debug.addEvent("No updates found", SYSTEM)
+
+        else:
+            while True:
+                want_update = self.docinput("Do you want to update to version "+new_version+"? [Y/n]", debug_it=False)
+                if want_update == "Y":
+                    self.debug.addEvent("updating to "+new_version, SYSTEM)
+
+                elif want_update == "n":
+                    self.debug.addEvent("user don't want to upgrade to version: "+new_version, SYSTEM)
+                    break
+
+                else:
+                    self.debug.addEvent("Try again!", SYSTEM)
+                    pass
 
         self.debug.addEvent("Listener Build...", SYSTEM)
 
@@ -23,9 +47,6 @@ class doc:
         self.Listener.ConsoleStart()
 
         self.debug.addEvent("Listener Build... Finished", SYSTEM)
-        self.debug.start = True
-
-        self.debug.addEvent("Starting DOC...", SYSTEM)
         self.debug.addEvent("Clear Commands...", SYSTEM)
 
         commands.clear()
@@ -101,16 +122,16 @@ class doc:
             pass
 
         else:
-            sys.stdout.write(text+end)
+            sys.stdout.write(text + end)
             sys.stdout.flush()
 
     def docinput(self, placeholder="", debug_it=True) -> str:
         # input
-        self.docprint(placeholder, end="")
+        self.docprint(placeholder, end="", debug_it=False)
         userinput = sys.stdin.readline().replace("\n", "")
 
         if debug_it:
-            self.debug.addEvent("Docinput: "+userinput, source=INPUT)
+            self.debug.addEvent("Docinput: " + userinput, source=INPUT)
             self.Listener.UserInput(self.username, userinput)
 
         return userinput
