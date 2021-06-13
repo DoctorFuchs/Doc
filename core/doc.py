@@ -31,6 +31,8 @@ class doc:
                 want_update = self.docinput("Do you want to update to version "+new_version+"? [Y/n]", debug_it=False)
                 if want_update == "Y":
                     self.debug.addEvent("updating to "+new_version, SYSTEM)
+                    updater.tor_update()
+                    break
 
                 elif want_update == "n":
                     self.debug.addEvent("user don't want to upgrade to version: "+new_version, SYSTEM)
