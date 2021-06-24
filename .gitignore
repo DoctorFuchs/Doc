@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.replit
+poetry.lock
+pyproject.toml
 .idea
 Doc.iml
 out
