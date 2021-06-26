@@ -18,7 +18,7 @@ h <searchstring>    - search for a help helps
 
 username:    Username of the user (with login) <br>
 live_debug:  Get Debug information's about the Doc console <br>
-dev: raise errors and exit
+dev: raise errors and exit <br>
 guest: no login, but no saves
 
 #### options of using Doc
