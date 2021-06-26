@@ -34,12 +34,8 @@ class doc:
                 if want_update == "Y":
                     self.debug.addEvent("updating to "+new_version, SYSTEM)
                     updater.tor_update()
-<<<<<<< Updated upstream
-                    break
-=======
                     self.docprint(updater.getPath())
                     quit()
->>>>>>> Stashed changes
 
                 elif want_update == "n":
                     self.debug.addEvent("user don't want to upgrade to version: "+new_version, SYSTEM)
