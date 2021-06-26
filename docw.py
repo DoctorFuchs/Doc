@@ -1,41 +1,47 @@
 import sys
 
+
+def getArgument(argument: str, default="") -> str:
+    for i in range(len(sys.argv)):
+        if sys.argv[i].startswith(argument):
+            try:
+                return sys.argv[i].split(":", 1)[1]
+
+            except:
+                return default
+
+    return default
+
+
+def getArgumentAsBool(argument: str, default=False) -> bool:
+    for i in range(len(sys.argv)):
+        if sys.argv[i].startswith(argument):
+            try:
+                return bool(sys.argv[i].split(":", 1)[1])
+
+            except:
+                return default
+
+    return default
+
+
 if sys.argv[1] == "core:run":
     from core.doc import doc
 
-    try:
-        username: str
-        debug = False
-        for i in range(len(sys.argv)):
-            if "username:" in sys.argv[i]:
-                username = sys.argv[i].replace("username:", "", 1)
+    this = doc(
+        username=getArgument(argument="username", default="USER"),
+        live_debug=getArgumentAsBool(argument="debug"),
+        guest=getArgumentAsBool("guest"),
+        dev=getArgumentAsBool("dev")
+    )
 
-            elif str(sys.argv[i]).startswith("debug:"):
-                try:
-                    debug = bool(sys.argv[i].replace("debug:", "", 1))
-
-                except:
-                    raise TypeError
-
-        try:
-            this = doc(username, live_debug=debug, guest=False)
-
-        except NameError:
-            print("""username  was not given, change to guest mode in guest mode debug is disabled""")
-            raise NameError
-
-    except NameError:
-        this = doc("GUEST", guest=True)
-
-    finally:
-        this.terminalclient()
-
+    this.client()
 # add here new clients
 
 else:
     print("""
 Run client with:
 
-python3 docw.py <client_name>:run
+python3 docw.py <client_name>:run <arguments>
 
 """)

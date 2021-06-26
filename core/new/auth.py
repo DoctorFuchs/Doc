@@ -58,7 +58,7 @@ class auth:
             self.register(self.instance.username, self.instance.docinput("password: "))
 
         while True:
-            if self.auth(self.instance.username, self.instance.docinput(f"{self.instance.username}'s password: ")):
+            if self.auth(self.instance.username, self.instance.docinput(f"{self.instance.username}'s password: ", secure=True)):
                 self.instance.docprint("Success")
                 break
 

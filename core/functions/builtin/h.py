@@ -10,19 +10,22 @@ for i in range(len(os.listdir(getMainPath() + "core/functions/builtin"))):
 
 
 def h(args: list, instance) -> str:
-    """print this help"""
+    """print a help"""
     coms.update()
     searchstring = ""
 
-    if args != []:
+    if args:
         searchstring = " ".join(args)
 
+    keys = get_keys(coms.getCommands())
+    keys.sort()
+
     output = """commands:\n"""
-    for i in range(len(get_keys(coms.getCommands()))):
-        if get_keys(coms.getCommands())[i] == " ":
+    for i in range(len(keys)):
+        if keys[i] == " ":
             continue
 
-        helper = coms.getCommands()[get_keys(coms.getCommands())[i]].split("(", 1)[0] + ".__doc__"
+        helper = coms.getCommands()[keys[i]].split("(", 1)[0] + ".__doc__"
 
         if helper == "h.h.__doc__":
             helper = "h.__doc__"
@@ -32,6 +35,6 @@ def h(args: list, instance) -> str:
             help_text = "No description available"
 
         if searchstring in get_keys(coms.getCommands())[i]:
-            output += f"""\t{get_keys(coms.getCommands())[i]}:{help_text}\n"""
+            output += f"""\t{keys[i]}: {help_text}\n"""
 
     return output

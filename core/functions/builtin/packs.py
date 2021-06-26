@@ -5,7 +5,7 @@ from core.new import commands
 def packs(args: list, instance):
     """view plugins"""
     args = " ".join(args)
-    verified = ["clock", "example"]
+    verified = ["clock_1", "example"]
     blocked = [".DS_Store", "__pycache__", "__init__.py", "PluginCommands.txt", "plugincodes.py", "verified.py"]
     plugins = os.listdir(commands.getMainPath() + 'core/plugins')
     v_text = ""

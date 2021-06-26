@@ -21,9 +21,15 @@ def echo(args, instance):
     instance.docprint(" ".join(args))
 
 
+@example_plugin.command("echo_2", args=True)
+def echo(args):
+    del args[0]  # args[0] is to 100% echo
+    return " ".join(args)
+
+
 class example_listener(Listener):
     def __init__(self):
         super().__init__()
 
-    def ConsoleRun(self, command: str, sender: str):
-        print("execute: " + command)
+    def ConsoleRun(self, console, command: str, sender: str):
+        console.docprint("execute: " + command)

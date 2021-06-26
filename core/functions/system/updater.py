@@ -61,12 +61,12 @@ def getContent(path: str, session=None) -> str:
     return raw.text
 
 
-def getAllFilesInDictionary(path: str, session=None):
+def getAllFilesInDictionary(path: str, github="doctorfuchs/doc", session=None):
     if session is None:
-        info = req.get("https://api.github.com/repos/doctorfuchs/doc/contents/" + path)
+        info = req.get(f"https://api.github.com/repos/{github}/contents/" + path)
 
     else:
-        info = session.get("https://api.github.com/repos/doctorfuchs/doc/contents/" + path)
+        info = session.get(f"https://api.github.com/repos/{github}/contents/" + path)
 
     if info.status_code != 200:
         return []
@@ -97,13 +97,13 @@ def getAllFilesInDictionary(path: str, session=None):
     return returner
 
 
-def update(sess=None):
+def update(sess=None, github="DoctorFuchs/Doc"):
     file_paths = []
     dicts = ["", ""]
 
     while True:
         try:
-            act = getAllFilesInDictionary(dicts[0], session=sess)
+            act = getAllFilesInDictionary(dicts[0], session=sess, github=github)
             for i in range(len(act)):
                 if act[i]["path"] in blocked:
                     continue
@@ -112,7 +112,6 @@ def update(sess=None):
                     file_paths.append(act[i]["path"])
 
                 elif act[i]["type"] == "dir":
-
                     try:
                         os.mkdir(getPath() + act[i]["path"])
 
@@ -158,14 +157,17 @@ def update(sess=None):
             except:
                 pass
 
+        except FileNotFoundError:
+            pass
+
     return "updated"
 
 
-def tor_update():
+def tor_update(github="Doctorfuchs/Doc"):
     with tor.TorClient() as torc:
         with torc.get_guard() as guard:
             adapter = TorHttpAdapter(guard, 2)
             with requests.Session() as sess:
                 sess.headers.update({"User-Agent": "Mozilla/5.0"})
                 sess.mount("https://", adapter)
-                update(sess)
+                update(sess, github)

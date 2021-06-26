@@ -1,3 +1,4 @@
+import getpass
 import sys
 import os
 import time
@@ -19,6 +20,7 @@ class doc:
         self.debug.start = True
 
         self.debug.addEvent("Starting DOC...", SYSTEM)
+
         self.debug.addEvent("Checking for updates...", SYSTEM)
 
         new_version = updater.getGithubVersion()
@@ -28,11 +30,16 @@ class doc:
 
         else:
             while True:
-                want_update = self.docinput("Do you want to update to version "+new_version+"? [Y/n]", debug_it=False)
+                want_update = self.docinput("\rDo you want to update to version "+new_version+"? [Y/n]", debug_it=False)
                 if want_update == "Y":
                     self.debug.addEvent("updating to "+new_version, SYSTEM)
                     updater.tor_update()
+<<<<<<< Updated upstream
                     break
+=======
+                    self.docprint(updater.getPath())
+                    quit()
+>>>>>>> Stashed changes
 
                 elif want_update == "n":
                     self.debug.addEvent("user don't want to upgrade to version: "+new_version, SYSTEM)
@@ -46,7 +53,7 @@ class doc:
 
         self.Listener = Listener.Listener()
         self.Listener.subclass = False
-        self.Listener.ConsoleStart()
+        self.Listener.ConsoleStart(self)
 
         self.debug.addEvent("Listener Build... Finished", SYSTEM)
         self.debug.addEvent("Clear Commands...", SYSTEM)
@@ -95,7 +102,7 @@ class doc:
 
             except:
                 self.docprint("login failed! exit")
-                self.Listener.ConsoleExit(400)
+                self.Listener.ConsoleExit(self, 400)
                 quit()
 
         else:
@@ -103,7 +110,7 @@ class doc:
 
     def log(self, command="docinputevent"):
         self.interpret.update()
-        self.Listener.ConsoleRun(command=command, sender=self.sender)
+        self.Listener.ConsoleRun(self, command=command, sender=self.sender)
         self.debug.addEvent(f"{command}", CONSOLE_IN)
 
         if command == "docinputevent":
@@ -117,7 +124,7 @@ class doc:
     def docprint(self, text, end="\n", display_section=OUTPUT, debug_it=True):
         text = str(text)
         if debug_it:
-            self.Listener.Print(text=text)
+            self.Listener.Print(self.instance, text=text)
             self.debug.addEvent("Docprint: " + text, str(display_section))
 
         if text == "None":
@@ -127,19 +134,23 @@ class doc:
             sys.stdout.write(text + end)
             sys.stdout.flush()
 
-    def docinput(self, placeholder="", debug_it=True) -> str:
+    def docinput(self, placeholder="", debug_it=True, secure=False) -> str:
         # input
         self.docprint(placeholder, end="", debug_it=False)
+        if secure:
+            userinput = getpass.getpass("")
+            return userinput
+
         userinput = sys.stdin.readline().replace("\n", "")
 
         if debug_it:
             self.debug.addEvent("Docinput: " + userinput, source=INPUT)
-            self.Listener.UserInput(self.username, userinput)
+            self.Listener.UserInput(self, self.username, userinput)
 
         return userinput
 
-    def terminalclient(self):
-        self.Listener.TerminalClientStart()
+    def client(self):
+        self.Listener.TerminalClientStart(self)
         self.docprint("DOC-TERMINAL_CLIENT running DOC-" + version.version)
         try:
             while True:
@@ -149,14 +160,14 @@ class doc:
                     continue
 
                 else:
-                    self.Listener.TerminalClientStop(exitCode=200)
+                    self.Listener.TerminalClientStop(self, exitCode=200)
                     self.debug.addEvent("Console Exited", CONSOLE)
                     break
 
         except Exception as e:
             if not self.dev:
                 self.docprint("Exit console")
-                self.Listener.TerminalClientStop()
+                self.Listener.TerminalClientStop(self)
                 self.debug.addEvent("Console Exited", CONSOLE)
                 quit()
 
@@ -168,11 +179,11 @@ class doc:
 
     def installPackage(self, packageName: str):
         path = f"plugins/{packageName}"
-        self.Listener.PluginInstall(packageName, path)
+        self.Listener.PluginInstall(self, packageName, path)
         self.debug.addEvent("Install Package " + packageName + " from " + path, PLUGIN)
         exec(f"import core.plugins.{packageName}.DOC as {packageName}")
 
 
 if __name__ == '__main__':
     this = doc(guest=False, username="Hallo", dev=True)
-    this.terminalclient()
+    this.client()

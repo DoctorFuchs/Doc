@@ -23,7 +23,7 @@ class interpreter:
     def log(self, command):
         instance = self.instance
         self.instance.debug.addEvent(event="Update Plugin Commands", source="PLUGINLOG")
-        self.instance.Listener.commandUpdate()
+        self.instance.Listener.commandUpdate(self)
         commands.update()
 
         com = ""
