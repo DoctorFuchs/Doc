@@ -72,6 +72,6 @@ class example_listener(Listener):
         super().__init__()
     
     # for example
-    def ConsoleRun(self, command: str, sender: str):
-        super().instance.docprint("execute: " + command)
+    def ConsoleRun(self, console, command: str, sender: str):
+        console.docprint("execute: " + command)
 ````
