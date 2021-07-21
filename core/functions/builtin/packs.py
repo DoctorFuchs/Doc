@@ -2,15 +2,15 @@ import os
 from core.new import commands
 
 
-def packs(args: list, instance):
+def packs(event):
     """view plugins"""
-    args = " ".join(args)
+    args = " ".join(event.args)
     verified = ["clock_1", "example"]
     blocked = [".DS_Store", "__pycache__", "__init__.py", "PluginCommands.txt", "plugincodes.py", "verified.py"]
     plugins = os.listdir(commands.getMainPath() + 'core/plugins')
     v_text = ""
 
-    instance.docprint("Available Plugins:\n")
+    event.print("Available Plugins:\n")
 
     for i in range(len(plugins)):
         if plugins[i] in verified:
@@ -23,9 +23,9 @@ def packs(args: list, instance):
             pass
 
         elif args in " ":
-            instance.docprint(plugins[i]+" "+v_text)
+            event.print(plugins[i]+" "+v_text)
 
         elif args in plugins[i]:
-            instance.docprint(plugins[i]+" "+v_text)
+            event.print(plugins[i]+" "+v_text)
 
-    instance.docprint("\ninstall plugins with 'pack <plugin_name>'\n")
+    event.print("\ninstall plugins with 'pack <plugin_name>'\n")

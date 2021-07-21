@@ -160,20 +160,20 @@ def download(pluginname):
     return "successful installed"
 
 
-def store(args, instance):
+def store(event):
     """install plugins from github"""
     try:
-        if args[0] == "install":
-            if args[1] not in os.listdir(getPath("")):
-                instance.docprint(download(args[1]))
+        if event.args[0] == "install":
+            if event.args[1] not in os.listdir(getPath("")):
+                event.print(download(event.args[1]))
 
             else:
-                instance.docprint("already installed")
+                event.print("already installed")
 
             return
 
-        elif args[0] == "list":
-            instance.docprint("Available plugins:")
+        elif event.args[0] == "list":
+            event.print("Available plugins:")
             avai = getAvailablePlugins()
 
             for i in range(len(avai)):
@@ -184,20 +184,20 @@ def store(args, instance):
                     else:
                         installed = " - not installed"
 
-                    instance.docprint("\t"+avai[i]["name"] + ": " + avai[i+1]["description"] + installed)
+                    event.print("\t"+avai[i]["name"] + ": " + avai[i+1]["description"] + installed)
 
                 except KeyError:
                     pass
 
                 i += 1
 
-            instance.docprint("")
+            event.print("")
             return
 
     except IndexError:
         pass
 
-    instance.docprint("""
+    event.print("""
 usage:  
     install <plugin>
     list

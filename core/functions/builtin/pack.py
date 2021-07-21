@@ -1,19 +1,19 @@
 from core.functions.system.Sections import CONSOLE
 
 
-def pack(args: list, instance):
+def pack(event):
     """install packages"""
     try:
-        instance.instance.installPackage(args[0])
-        instance.instance.installed.append(args[0])
-        instance.instance.docprint("Successful installed Plugin "+args[0])
+        event.__installPackage__(event.args[0])
+        event.installed.append(event.args[0])
+        event.print("Successful installed Plugin "+event.args[0])
 
-    except:
+    except OSError:
         try:
-            if args[0] is None:
-                args[0] = " "
+            if event.args[0] is None:
+                event.args[0] = " "
 
         except:
-            args = [" "]
+            event.args = [" "]
 
-        instance.instance.docprint("no package available named " + args[0], display_section=CONSOLE)
+        event.print("no package available named " + event.args[0], display_section=CONSOLE)

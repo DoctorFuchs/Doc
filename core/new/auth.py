@@ -55,7 +55,7 @@ class auth:
         if not self.isRegistered(self.instance.username):
             self.instance.docprint("This user is not registered! Sign up now!")
             self.instance.docprint("username: " + self.instance.username)
-            self.register(self.instance.username, self.instance.docinput("password: "))
+            self.register(self.instance.username, self.instance.docinput("password: ", secure=True))
 
         while True:
             if self.auth(self.instance.username, self.instance.docinput(f"{self.instance.username}'s password: ", secure=True)):

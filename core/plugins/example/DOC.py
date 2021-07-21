@@ -4,7 +4,7 @@ from core.new.Listener import Listener
 example_plugin = plugin.plugin("example")
 
 
-@example_plugin.command("version", instance=True)
+@example_plugin.command("version")
 def example(instance):
     import version  # use local imports
     instance.docprint("print " + version.version)  # use docprint() to print on all clients
@@ -25,6 +25,11 @@ def echo(args, instance):
 def echo(args):
     del args[0]  # args[0] is to 100% echo
     return " ".join(args)
+
+
+@example_plugin.command("test")
+def test():
+    print("test")
 
 
 class example_listener(Listener):

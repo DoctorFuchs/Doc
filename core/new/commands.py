@@ -47,15 +47,13 @@ def update():
         if docbuiltins[i] in ["__init__.py", "__pycache__", ".DS_Store"]:
             continue
 
-        commands[docbuiltins[i].replace(".py", "")] = exedoc + "(args, self.instance.getInstance())"
+        commands[docbuiltins[i].replace(".py", "")] = exedoc + "(event)"
 
     comfile.close()
 
 
-def addCommand(command, code, pluginName, runable=False, needArgs=None):
+def addCommand(command, code, pluginName, runable=False):
     """needArgs is only used, when code is a function"""
-    if needArgs is None:
-        needArgs = ["args", "instance"]
     comfile = open(getMainPath() + "core/plugins/PluginCommands.txt", "at")
     codefile = open(getMainPath() + "core/plugins/plugincodes.py", "at")
 
@@ -69,7 +67,7 @@ def addCommand(command, code, pluginName, runable=False, needArgs=None):
             comfile.write(pluginName + " " + command.lower() + ":" + str(code) + ";\n")
 
         except:
-            args = ", ".join(needArgs)
+            args = "event"
 
             codepath = "plugins.plugincodes." + code.__code__.co_name + f"({args})"
             comfile.write(pluginName + " " + command.lower() + ":" + codepath + ";\n")

@@ -1,3 +1,5 @@
+import sys
+
 from core.functions.system.getMainPath import getMainPath
 from core.new import commands
 from core import plugins
@@ -11,6 +13,18 @@ for i in range(len(os.listdir(getMainPath() + "core/functions/builtin"))):
             ".py", ""))
 
 
+class Event:
+    def __init__(self, instance, args: dict, builtin = False):
+        self.args = args
+        self.print = instance.docprint
+        self.input = instance.docinput
+        self.__installPackage__ = instance.installPackage
+        self.installed = instance.installed
+        if builtin:
+            self.Listener = instance.Listener
+            self.Debug = instance.debug
+
+
 class interpreter:
     def __init__(self, instance):
         self.commands = commands.getCommands()
@@ -21,7 +35,6 @@ class interpreter:
         self.commands = commands.getCommands()
 
     def log(self, command):
-        instance = self.instance
         self.instance.debug.addEvent(event="Update Plugin Commands", source="PLUGINLOG")
         self.instance.Listener.commandUpdate(self)
         commands.update()
@@ -36,7 +49,10 @@ class interpreter:
             args = c
 
         except:
-            pass
+            args = []
+
+        builtin = com+".py" in os.listdir(getMainPath()+"core/functions/builtin")
+        event = Event(self.instance, args, builtin)
 
         if com in " ":
             pass
@@ -60,7 +76,7 @@ class interpreter:
 
                 except:
                     try:
-                        obj = self.commands[com+" "]
+                        obj = self.commands[com + " "]
                         eval(obj)
 
                     except:
@@ -77,3 +93,14 @@ class interpreter:
 
         else:
             return "no command named " + com
+
+    def logfile(self, path):
+        try:
+            file = open(path, "r")
+
+        except FileNotFoundError:
+            self.instance.docprint("File not found")
+            return
+
+        for command in file.readlines():
+            self.instance.docprint(self.log(command))

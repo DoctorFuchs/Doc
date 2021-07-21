@@ -30,15 +30,16 @@ class doc:
 
         else:
             while True:
-                want_update = self.docinput("\rDo you want to update to version "+new_version+"? [Y/n]", debug_it=False)
+                want_update = self.docinput("\rDo you want to update to version " + new_version + "? [Y/n]",
+                                            debug_it=False)
                 if want_update == "Y":
-                    self.debug.addEvent("updating to "+new_version, SYSTEM)
+                    self.debug.addEvent("updating to " + new_version, SYSTEM)
                     updater.tor_update()
                     self.docprint(updater.getPath())
                     quit()
 
                 elif want_update == "n":
-                    self.debug.addEvent("user don't want to upgrade to version: "+new_version, SYSTEM)
+                    self.debug.addEvent("user don't want to upgrade to version: " + new_version, SYSTEM)
                     break
 
                 else:
@@ -71,6 +72,18 @@ class doc:
         self.instance = self
 
         self.debug.addEvent("Create Variables...Finished", SYSTEM)
+        self.debug.addEvent("Override python functions...", SYSTEM)
+
+        global print, input
+
+        def print(text, end="\n"):
+            # self.docprint(text=text, end=end)
+            sys.stdout.write("yeah")
+
+        def input(_promt):
+            self.docinput(placeholder=_promt)
+
+        self.debug.addEvent("Override python functions...Finished", SYSTEM)
         self.debug.addEvent("Auth Build...", SYSTEM)
 
         self.auth = auth.auth(self.instance)

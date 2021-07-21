@@ -9,12 +9,12 @@ for i in range(len(os.listdir(getMainPath() + "core/functions/builtin"))):
         exec("from core.functions.builtin import " + os.listdir(getMainPath() + "core/functions/builtin")[i].replace(".py", ""))
 
 
-def h(args: list, instance) -> str:
+def h(event) -> str:
     """print a help"""
     coms.update()
     searchstring = ""
 
-    if args:
+    if event.args:
         searchstring = " ".join(args)
 
     keys = get_keys(coms.getCommands())
